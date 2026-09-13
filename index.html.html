@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>스스로 학습 다이어리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFF8EC;
+    --paper-2:#FBEFDA;
+    --ink:#2D2A26;
+    --ink-soft:#6B6259;
+    --sky:#3E8FB0;
+    --sky-deep:#2C6E89;
+    --sun:#F4B942;
+    --leaf:#5FA875;
+    --berry:#E4572E;
+    --lilac:#8E6FCF;
+    --line:#E7DBC4;
+    --radius:18px;
+    --shadow: 0 6px 0 rgba(45,42,38,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 8% 12%, rgba(244,185,66,0.14), transparent 40%),
+      radial-gradient(circle at 92% 88%, rgba(62,143,176,0.12), transparent 40%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Gowun Dodum', sans-serif;
+    min-height:100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1,h2,h3,.brand{ font-family:'Do Hyeon', sans-serif; letter-spacing:0.5px; }
+  #app{ max-width:960px; margin:0 auto; padding:18px 16px 80px; }
+
+  /* ---------- Header ---------- */
+  .top-bar{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    flex-wrap:wrap;
+    padding:14px 18px;
+    background:#fff;
+    border:2px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+  }
+  .brand-block{ display:flex; align-items:center; gap:12px; }
+  .icon-badge{
+    width:52px; height:52px; border-radius:16px;
+    background:linear-gradient(160deg, var(--sky), var(--sky-deep));
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; flex-shrink:0;
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.15);
+  }
+  .brand-title{ font-size:22px; margin:0; color:var(--ink); }
+  .brand-sub{ font-size:13px; color:var(--ink-soft); margin-top:2px; }
+  .date-streak{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .date-pill, .streak-pill{
+    display:flex; align-items:center; gap:6px;
+    padding:8px 14px; border-radius:999px; font-size:14px; font-weight:600;
+  }
+  .date-pill{ background:var(--paper-2); color:var(--ink); border:1.5px solid var(--line); }
+  .streak-pill{ background:#FFF0E4; color:var(--berry); border:1.5px solid #F4C9B4; }
+
+  /* ---------- Sections ---------- */
+  section{ margin-top:22px; }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:4px; }
+  .section-head h2{ font-size:19px; margin:0; }
+  .section-hint{ font-size:12.5px; color:var(--ink-soft); }
+
+  /* ---------- Today card ---------- */
+  .today-card{
+    background:#fff; border:3px solid var(--berry); border-radius:var(--radius);
+    padding:16px 16px 14px; box-shadow:var(--shadow);
+  }
+  .today-empty{ color:var(--ink-soft); font-size:14px; text-align:center; padding:22px 6px; }
+  .today-list{ display:flex; flex-direction:column; gap:8px; }
+  .today-row{ font-size:15px; }
+  .today-card .day-complete-btn{ margin-top:12px; }
+
+  /* ---------- Bank ---------- */
+  .bank-card{
+    background:#fff; border:2px solid var(--line); border-radius:var(--radius);
+    padding:16px; box-shadow:var(--shadow);
+  }
+  #add-form{ display:flex; gap:8px; margin-bottom:12px; }
+  #new-task-input{
+    flex:1; padding:12px 14px; border-radius:12px; border:2px solid var(--line);
+    font-family:inherit; font-size:15px; background:var(--paper);
+  }
+  #new-task-input:focus{ outline:none; border-color:var(--sky); }
+  .btn{
+    border:none; cursor:pointer; font-family:'Gowun Dodum', sans-serif; font-weight:700;
+    border-radius:12px; padding:12px 16px; font-size:14.5px;
+    transition: transform .08s ease;
+  }
+  .btn:active{ transform: translateY(2px); }
+  .btn-primary{ background:var(--sky); color:#fff; box-shadow:0 4px 0 var(--sky-deep); }
+  .btn-primary:active{ box-shadow:0 2px 0 var(--sky-deep); }
+  .btn-ghost{ background:var(--paper-2); color:var(--ink); border:1.5px solid var(--line); }
+  .btn-berry{ background:var(--berry); color:#fff; box-shadow:0 4px 0 #B9401D; }
+  .btn-berry:disabled{ background:#E7DBC4; color:#a89e8f; box-shadow:none; cursor:not-allowed; }
+  .btn-berry:active:not(:disabled){ box-shadow:0 2px 0 #B9401D; }
+
+  #bank-list{ display:flex; gap:10px; flex-wrap:wrap; min-height:46px; }
+  .chip{
+    display:flex; align-items:center; gap:8px;
+    background:var(--paper-2); border:2px dashed #D9C79E;
+    padding:9px 13px; border-radius:14px; font-size:14.5px; cursor:grab;
+    user-select:none; touch-action:none;
+  }
+  .chip:active{ cursor:grabbing; }
+  .chip .x{ opacity:.5; font-size:13px; padding:0 2px; }
+  .empty-msg{ color:var(--ink-soft); font-size:14px; font-style:normal; padding:8px 2px; }
+
+  /* ---------- Week board (planning grid) ---------- */
+  .week-board{
+    display:flex; gap:12px; overflow-x:auto; padding:6px 2px 14px;
+    scroll-snap-type:x proximity;
+  }
+  .day-col{
+    scroll-snap-align:start;
+    flex:0 0 172px; background:#fff; border:2px solid var(--line); border-radius:var(--radius);
+    padding:12px; display:flex; flex-direction:column; gap:10px; min-height:190px;
+    transition: border-color .15s, background .15s;
+  }
+  .day-col.drag-over{ border-color:var(--sky); background:#F1F9FC; }
+  .day-col.today{ border-color:var(--berry); }
+  .day-head{ display:flex; align-items:center; justify-content:space-between; }
+  .day-name{ font-family:'Do Hyeon',sans-serif; font-size:16px; }
+  .day-date{ font-size:11.5px; color:var(--ink-soft); }
+  .today-badge{
+    font-size:10.5px; background:var(--berry); color:#fff; padding:2px 7px; border-radius:999px;
+  }
+  .day-tasks{ display:flex; flex-direction:column; gap:7px; flex:1; }
+  .task-row{
+    display:flex; align-items:flex-start; gap:7px; background:var(--paper);
+    border:1.5px solid var(--line); border-radius:10px; padding:7px 8px; font-size:13.5px;
+  }
+  .task-row.done{ background:#EFF6EF; border-color:#CFE6D2; }
+  .task-row.done .task-text{ text-decoration:line-through; color:var(--ink-soft); }
+  .task-check{
+    width:19px; height:19px; border-radius:6px; border:2px solid var(--sky);
+    flex-shrink:0; margin-top:1px; cursor:pointer; background:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff;
+  }
+  .task-row.done .task-check{ background:var(--leaf); border-color:var(--leaf); }
+  .status-dot{ width:10px; height:10px; border-radius:50%; background:#D9C79E; flex-shrink:0; margin-top:4px; }
+  .status-dot.on{ background:var(--leaf); }
+  .task-text{ flex:1; word-break:keep-all; line-height:1.3; cursor:pointer; }
+  .task-del{ opacity:.4; font-size:12px; cursor:pointer; padding:2px; }
+  .day-empty{ color:var(--ink-soft); font-size:12.5px; text-align:center; margin:auto 0; }
+  .day-progress{ font-size:11.5px; color:var(--ink-soft); }
+  .day-complete-btn{ width:100%; padding:9px 6px; font-size:13px; border-radius:10px; }
+
+  /* ---------- Week footer ---------- */
+  .week-footer{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    background:#fff; border:2px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; margin-top:8px;
+  }
+  .week-progress-track{
+    flex:1; min-width:160px; height:14px; background:var(--paper-2); border-radius:999px; overflow:hidden;
+    border:1.5px solid var(--line);
+  }
+  .week-progress-fill{ height:100%; background:linear-gradient(90deg,var(--sun),var(--berry)); width:0%; transition:width .4s ease; }
+  .week-progress-label{ font-size:13px; font-weight:700; white-space:nowrap; }
+
+  /* ---------- Pouch (내 보상 보따리) ---------- */
+  .pouch-card{
+    display:flex; flex-direction:column; gap:10px; background:#fff; border:2px solid var(--line);
+    border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow);
+  }
+  .pouch-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    background:var(--paper); border:1.5px solid var(--line); border-radius:12px; padding:9px 12px;
+  }
+  .pouch-text{ font-size:14px; }
+  .pouch-tag{ background:var(--lilac); color:#fff; font-size:11px; padding:2px 7px; border-radius:999px; margin-right:7px; }
+  .pouch-date{ color:var(--ink-soft); font-size:12px; margin-left:4px; }
+  .pouch-use-btn{ padding:7px 10px; font-size:12.5px; white-space:nowrap; }
+
+  /* ---------- Rewards pool management ---------- */
+  details.rewards-card{ background:#fff; border:2px solid var(--line); border-radius:var(--radius); padding:14px 16px; }
+  details.rewards-card summary{ cursor:pointer; font-weight:700; font-size:15px; list-style:none; display:flex; align-items:center; gap:8px;}
+  details.rewards-card summary::-webkit-details-marker{ display:none; }
+  .reward-list{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .reward-chip{
+    background:#FBF1FF; border:1.5px solid #E3CFF5; color:var(--lilac); font-weight:700;
+    padding:7px 11px; border-radius:999px; font-size:13px; display:flex; align-items:center; gap:6px;
+  }
+  .reward-chip .x{ cursor:pointer; opacity:.6; }
+  #reward-form{ display:flex; gap:8px; }
+  #reward-input{ flex:1; padding:10px 12px; border-radius:10px; border:1.5px solid var(--line); font-family:inherit; }
+
+  /* ---------- Icon preview / footer note ---------- */
+  .icon-preview-row{ display:flex; align-items:center; gap:12px; margin-top:26px; padding:14px; }
+  .icon-mock{
+    width:56px; height:56px; border-radius:16px; background:linear-gradient(160deg,var(--sun),var(--berry));
+    display:flex; align-items:center; justify-content:center; font-size:26px; position:relative;
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.15);
+  }
+  .icon-mock .badge{
+    position:absolute; bottom:-4px; right:-4px; background:var(--leaf); color:#fff; border-radius:50%;
+    width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:11px;
+    border:2px solid #fff;
+  }
+  .icon-note{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; }
+
+  /* ---------- Day picker popover ---------- */
+  #dayPickerPopover{
+    position:fixed; z-index:60; background:#fff; border:2px solid var(--line); border-radius:14px;
+    box-shadow:0 10px 24px rgba(0,0,0,0.15); padding:8px; display:none; flex-wrap:wrap; gap:6px; width:220px;
+  }
+  #dayPickerPopover.show{ display:flex; }
+  #dayPickerPopover button{
+    flex:1 0 40%; border:1.5px solid var(--line); background:var(--paper); border-radius:8px;
+    padding:7px 4px; font-size:12.5px; cursor:pointer; font-family:inherit;
+  }
+  #dayPickerPopover button.bank-opt{ flex-basis:100%; background:var(--paper-2); font-weight:700; }
+  #dayPickerPopover button.del-opt{ flex-basis:100%; background:#FDEDEA; color:var(--berry); font-weight:700; }
+
+  /* ---------- Stamp layer ---------- */
+  #stampLayer{ position:fixed; inset:0; pointer-events:none; z-index:80; overflow:hidden; }
+  .stamp{
+    position:absolute; font-family:'Do Hyeon',sans-serif; font-size:15px; color:var(--berry);
+    background:#fff; border:3px solid var(--berry); border-radius:999px; padding:6px 12px;
+    transform: translate(-50%,-50%) rotate(-14deg) scale(0.2); opacity:0;
+    animation: stampPop 1.15s ease forwards;
+    white-space:nowrap;
+  }
+  @keyframes stampPop{
+    0%{ transform: translate(-50%,-50%) rotate(-14deg) scale(0.2); opacity:0; }
+    35%{ transform: translate(-50%,-50%) rotate(-8deg) scale(1.12); opacity:1; }
+    50%{ transform: translate(-50%,-50%) rotate(-10deg) scale(1); opacity:1; }
+    100%{ transform: translate(-50%,-64%) rotate(-10deg) scale(1); opacity:0; }
+  }
+
+  /* ---------- Confetti ---------- */
+  #confettiLayer{ position:fixed; inset:0; pointer-events:none; z-index:90; overflow:hidden; }
+  .confetti-piece{ position:absolute; top:-20px; border-radius:2px; animation: confettiFall linear forwards; }
+  @keyframes confettiFall{
+    to{ transform: translateY(115vh) rotate(540deg); opacity:0.9; }
+  }
+
+  /* ---------- Gacha modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(45,42,38,0.55); z-index:100;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  }
+  .modal-overlay.hidden{ display:none; }
+  .gacha-card{
+    background:var(--paper); border-radius:24px; padding:26px 22px 22px; width:100%; max-width:340px;
+    text-align:center; position:relative; border:3px solid var(--sky);
+    box-shadow: 0 14px 0 rgba(45,42,38,0.12);
+  }
+  .gacha-card.special{ border-color:var(--sun); }
+  .gacha-title{ font-size:18px; margin:0 0 4px; }
+  .gacha-sub{ font-size:12.5px; color:var(--ink-soft); margin-bottom:14px; }
+  .machine{ width:130px; height:150px; margin:0 auto 14px; position:relative; }
+  .machine-dome{
+    width:110px; height:80px; margin:0 auto; border-radius:55px 55px 20px 20px;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.15) 60%), var(--sky);
+    border:3px solid var(--sky-deep); position:relative; overflow:hidden;
+  }
+  .machine-base{
+    width:130px; height:56px; background:var(--sky-deep); border-radius:14px; margin:-6px auto 0;
+    position:relative; display:flex; align-items:center; justify-content:center;
+  }
+  .machine-slot{ width:52px; height:16px; background:#1F4C5E; border-radius:8px; }
+  .falling-capsule{
+    position:absolute; left:50%; top:70px; width:26px; height:26px; border-radius:50%;
+    background: linear-gradient(180deg, var(--sun), var(--berry));
+    transform: translate(-50%,0); opacity:0; border:2px solid #fff;
+  }
+  .falling-capsule.drop{ animation: capsuleDrop 0.9s cubic-bezier(.4,1.8,.6,1) forwards; }
+  @keyframes capsuleDrop{
+    0%{ top:56px; opacity:1; }
+    70%{ top:118px; opacity:1; }
+    100%{ top:112px; opacity:1; }
+  }
+  .reward-reveal{ margin-top:10px; opacity:0; transform: scale(0.6) translateY(6px); }
+  .reward-reveal.show{ animation: revealPop .5s ease forwards; }
+  @keyframes revealPop{ to{ opacity:1; transform:scale(1) translateY(0); } }
+  .reward-text{ font-family:'Do Hyeon',sans-serif; font-size:20px; color:var(--berry); margin:4px 0 2px; }
+  .reward-caption{ font-size:12.5px; color:var(--ink-soft); }
+  .modal-close-btn{ margin-top:16px; width:100%; }
+
+  @media (max-width:520px){
+    .brand-title{ font-size:19px; }
+    .day-col{ flex-basis:150px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="top-bar">
+    <div class="brand-block">
+      <div class="icon-badge">📔</div>
+      <div>
+        <h1 class="brand-title">스스로 학습 다이어리</h1>
+        <div class="brand-sub">주간 계획을 세우고, 오늘의 학습판에서 체크하고, 뽑기로 보상 받기!</div>
+      </div>
+    </div>
+    <div class="date-streak">
+      <div class="date-pill" id="todayPill">오늘</div>
+      <div class="streak-pill" id="streakPill">🔥 0/7일</div>
+    </div>
+  </div>
+
+  <section class="today-section">
+    <div class="section-head">
+      <h2>✅ 오늘의 학습판</h2>
+      <span class="section-hint" id="todayHint"></span>
+    </div>
+    <div class="today-card" id="todayCard"></div>
+  </section>
+
+  <section class="bank-section">
+    <div class="section-head">
+      <h2>✏️ 새 학습거리 추가</h2>
+      <span class="section-hint">여기서 만든 다음, 아래 주간 계획에서 요일에 넣어요</span>
+    </div>
+    <div class="bank-card">
+      <form id="add-form">
+        <input id="new-task-input" type="text" maxlength="30" placeholder="예: 수학 익힘책 2쪽 풀기" autocomplete="off" />
+        <button type="submit" class="btn btn-primary">추가</button>
+      </form>
+      <div id="bank-list"></div>
+    </div>
+  </section>
+
+  <section class="week-section">
+    <div class="section-head">
+      <h2>🗓️ 이번 주 학습 계획</h2>
+      <span class="section-hint">칩을 길게 눌러 요일 칸으로 옮기거나, 톡 눌러 요일을 골라요</span>
+    </div>
+    <div class="week-board" id="weekBoard"></div>
+    <div class="week-footer">
+      <div class="week-progress-label" id="weekProgressLabel">이번 주 0/7일 완료</div>
+      <div class="week-progress-track"><div class="week-progress-fill" id="weekProgressFill"></div></div>
+      <button class="btn btn-berry" id="weeklyGachaBtn" disabled>🎁 주간 뽑기</button>
+    </div>
+  </section>
+
+  <section class="pouch-section">
+    <div class="section-head">
+      <h2>🎒 내 보상 보따리</h2>
+      <span class="section-hint">받은 보상을 실제로 사용한 뒤 지워주세요</span>
+    </div>
+    <div class="pouch-card" id="pouchCard"></div>
+  </section>
+
+  <section class="rewards-section">
+    <details class="rewards-card">
+      <summary>⚙️ 뽑기 보상 목록 설정</summary>
+      <div class="reward-list" id="rewardList"></div>
+      <form id="reward-form">
+        <input id="reward-input" type="text" maxlength="24" placeholder="새 보상 추가 (예: 젤리 하나 먹기)" autocomplete="off" />
+        <button type="submit" class="btn btn-ghost">추가</button>
+      </form>
+    </details>
+  </section>
+
+  <div class="icon-preview-row">
+    <div class="icon-mock">📔<span class="badge">✓</span></div>
+    <div class="icon-note">앱 아이콘 시안: 크림색 배경에 다이어리 + 완료 체크 배지 조합. 홈 화면에서도 "오늘 할 일을 적고 확인한다"는 느낌이 바로 전달되도록 만들었어요.</div>
+  </div>
+
+</div>
+
+<div id="stampLayer"></div>
+<div id="confettiLayer"></div>
+
+<div id="dayPickerPopover"></div>
+
+<div id="gachaModal" class="modal-overlay hidden">
+  <div class="gacha-card" id="gachaCard">
+    <h3 class="gacha-title" id="gachaTitle">오늘의 학습 완료!</h3>
+    <div class="gacha-sub" id="gachaSub">뽑기 버튼을 눌러 보상을 확인해요</div>
+    <div class="machine">
+      <div class="machine-dome" id="machineDome"></div>
+      <div class="falling-capsule" id="fallingCapsule"></div>
+      <div class="machine-base"><div class="machine-slot"></div></div>
+    </div>
+    <button class="btn btn-berry" id="gachaPullBtn">뽑기!</button>
+    <div class="reward-reveal" id="rewardReveal">
+      <div class="reward-caption">오늘의 보상은...</div>
+      <div class="reward-text" id="rewardText"></div>
+    </div>
+    <button class="btn btn-ghost modal-close-btn hidden" id="gachaCloseBtn">닫기</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var DAY_LABELS = ['월','화','수','목','금','토','일'];
+  var STAMPS = ['참 잘했어요! ⭐','최고예요! 🎉','대단해요! 💪','굿잡! 👏','완벽해요! 🌟','계속 파이팅! 🔥'];
+  var DEFAULT_REWARDS = ['용돈 1,000원 받기','자유시간 1시간','학습 하나 생략권','칭찬 스티커 1장','좋아하는 간식 먹기'];
+  var STORAGE_KEY = 'studyquest:data';
+
+  var state = {
+    tasks: [],       // {id, text, date: 'YYYY-MM-DD'|null, done:bool}
+    rewards: DEFAULT_REWARDS.slice(),
+    dailyClaims: {}, // date -> rewardText  (게이트: 오늘 이미 뽑았는지)
+    weeklyClaims: {}, // weekKey -> rewardText
+    wonRewards: []   // {id, text, date, type:'daily'|'weekly'}  내 보상 보따리
+  };
+
+  var storageReady = (function(){
+    try{
+      var testKey = '__studyquest_test__';
+      window.localStorage.setItem(testKey, '1');
+      window.localStorage.removeItem(testKey);
+      return true;
+    }catch(e){ return false; }
+  })();
+
+  function uid(){ return 't' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+  function pad(n){ return n<10 ? '0'+n : ''+n; }
+  function toKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function todayKey(){ return toKey(new Date()); }
+
+  function getWeekInfo(){
+    var now = new Date();
+    var dow = now.getDay();
+    var mondayOffset = (dow === 0) ? -6 : (1 - dow);
+    var monday = new Date(now); monday.setHours(0,0,0,0); monday.setDate(now.getDate()+mondayOffset);
+    var days = [];
+    for(var i=0;i<7;i++){
+      var d = new Date(monday); d.setDate(monday.getDate()+i);
+      days.push({ key: toKey(d), label: DAY_LABELS[i], m: d.getMonth()+1, day: d.getDate(), isToday: toKey(d)===todayKey() });
+    }
+    return { weekKey: days[0].key, days: days };
+  }
+
+  // ---------------- persistence (브라우저 localStorage) ----------------
+  function loadState(cb){
+    if(!storageReady){ cb(); return; }
+    try{
+      var raw = window.localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        var parsed = JSON.parse(raw);
+        state.tasks = parsed.tasks || [];
+        state.rewards = (parsed.rewards && parsed.rewards.length) ? parsed.rewards : DEFAULT_REWARDS.slice();
+        state.dailyClaims = parsed.dailyClaims || {};
+        state.weeklyClaims = parsed.weeklyClaims || {};
+        state.wonRewards = parsed.wonRewards || [];
+      }
+    }catch(e){ /* ignore corrupt data */ }
+    cb();
+  }
+
+  var saveTimer = null;
+  function saveState(){
+    if(!storageReady) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      try{ window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){ /* storage full or blocked */ }
+    }, 150);
+  }
+
+  // ---------------- audio ----------------
+  var audioCtx = null;
+  function ctx(){
+    if(!audioCtx){
+      try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ audioCtx = null; }
+    }
+    return audioCtx;
+  }
+  function tone(ac, freq, startAt, dur, peak){
+    var osc = ac.createOscillator();
+    var gain = ac.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, ac.currentTime+startAt);
+    gain.gain.exponentialRampToValueAtTime(peak||0.16, ac.currentTime+startAt+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+startAt+dur);
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.start(ac.currentTime+startAt);
+    osc.stop(ac.currentTime+startAt+dur+0.05);
+  }
+  function playCheckChime(){ var ac=ctx(); if(!ac) return; tone(ac,880,0,0.12); tone(ac,1174,0.09,0.16); }
+  function playDayFanfare(){ var ac=ctx(); if(!ac) return; [523,659,784,1047].forEach(function(f,i){ tone(ac,f,i*0.11,0.22,0.18); }); }
+  function playWeeklyFanfare(){ var ac=ctx(); if(!ac) return; [392,523,659,784,988,1319].forEach(function(f,i){ tone(ac,f,i*0.1,0.3,0.2); }); }
+
+  // ---------------- stamp & confetti ----------------
+  function showStamp(anchorRect){
+    var layer = document.getElementById('stampLayer');
+    var el = document.createElement('div');
+    el.className = 'stamp';
+    el.textContent = STAMPS[Math.floor(Math.random()*STAMPS.length)];
+    el.style.left = (anchorRect.left + anchorRect.width/2)+'px';
+    el.style.top = anchorRect.top+'px';
+    layer.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 1250);
+  }
+  function spawnConfetti(count){
+    var layer = document.getElementById('confettiLayer');
+    var colors = ['#E4572E','#F4B942','#3E8FB0','#5FA875','#8E6FCF'];
+    for(var i=0;i<count;i++){
+      var p = document.createElement('div');
+      p.className = 'confetti-piece';
+      var size = 6+Math.random()*6;
+      p.style.width = size+'px';
+      p.style.height = (size*0.4)+'px';
+      p.style.left = (Math.random()*100)+'vw';
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      var dur = 2.2+Math.random()*1.6;
+      p.style.animationDuration = dur+'s';
+      p.style.animationDelay = (Math.random()*0.4)+'s';
+      layer.appendChild(p);
+      (function(el,d){ setTimeout(function(){ el.remove(); }, (d+0.5)*1000); })(p, dur);
+    }
+  }
+
+  // ---------------- rendering ----------------
+  function render(){
+    renderHeader();
+    renderToday();
+    renderBank();
+    renderWeek();
+    renderPouch();
+    renderRewards();
+  }
+
+  function renderHeader(){
+    var now = new Date();
+    var wd = ['일','월','화','수','목','금','토'][now.getDay()];
+    document.getElementById('todayPill').textContent = (now.getMonth()+1)+'월 '+now.getDate()+'일 ('+wd+')';
+    var info = getWeekInfo();
+    var done = info.days.filter(function(d){ return isDayComplete(d.key); }).length;
+    document.getElementById('streakPill').textContent = '🔥 '+done+'/7일';
+  }
+
+  function tasksForDate(dateKeyOrNull){
+    return state.tasks.filter(function(t){ return t.date === dateKeyOrNull; });
+  }
+  function isDayComplete(dateKey){
+    var list = tasksForDate(dateKey);
+    return list.length>0 && list.every(function(t){ return t.done; });
+  }
+
+  function renderToday(){
+    var key = todayKey();
+    var now = new Date();
+    var wd = ['일','월','화','수','목','금','토'][now.getDay()];
+    document.getElementById('todayHint').textContent = (now.getMonth()+1)+'월 '+now.getDate()+'일 ('+wd+'요일)';
+
+    var card = document.getElementById('todayCard');
+    var tasks = tasksForDate(key);
+    var html = '';
+    if(tasks.length===0){
+      html += '<div class="today-empty">오늘 학습판이 비어있어요. 아래 "이번 주 학습 계획"에서 오늘 칸에 넣어주세요!</div>';
+    }else{
+      html += '<div class="today-list">';
+      tasks.forEach(function(t){
+        html += '<div class="task-row today-row'+(t.done?' done':'')+'">'+
+          '<div class="task-check" data-check="'+t.id+'">'+(t.done?'✓':'')+'</div>'+
+          '<div class="task-text" data-reassign="'+t.id+'">'+escapeHtml(t.text)+'</div>'+
+          '<div class="task-del" data-del="'+t.id+'">✕</div>'+
+        '</div>';
+      });
+      html += '</div>';
+      var doneCount = tasks.filter(function(t){return t.done;}).length;
+      html += '<div class="day-progress">'+doneCount+' / '+tasks.length+' 완료</div>';
+    }
+    card.innerHTML = html;
+
+    if(tasks.length>0){
+      var complete = isDayComplete(key);
+      var claimed = !!state.dailyClaims[key];
+      var btn = document.createElement('button');
+      btn.className = 'btn btn-berry day-complete-btn';
+      btn.textContent = claimed ? ('🎉 오늘의 보상: '+state.dailyClaims[key]) : '오늘의 학습 완료! 🎁';
+      btn.disabled = !complete || claimed;
+      if(complete && !claimed){ btn.addEventListener('click', function(){ openGacha('daily', key); }); }
+      card.appendChild(btn);
+    }
+  }
+
+  function renderBank(){
+    var wrap = document.getElementById('bank-list');
+    wrap.innerHTML = '';
+    var bankTasks = tasksForDate(null);
+    if(bankTasks.length===0){
+      wrap.innerHTML = '<div class="empty-msg">새 학습거리를 적어보세요! 적은 뒤 아래 주간 계획의 요일 칸으로 옮기면 돼요.</div>';
+      return;
+    }
+    bankTasks.forEach(function(t){
+      var chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.dataset.id = t.id;
+      chip.innerHTML = '<span class="chip-text">'+escapeHtml(t.text)+'</span><span class="x" data-del="'+t.id+'">✕</span>';
+      wrap.appendChild(chip);
+      attachChipDrag(chip, t.id);
+    });
+  }
+
+  function renderWeek(){
+    var info = getWeekInfo();
+    var board = document.getElementById('weekBoard');
+    board.innerHTML = '';
+    info.days.forEach(function(d){
+      var col = document.createElement('div');
+      col.className = 'day-col' + (d.isToday ? ' today' : '');
+      col.dataset.day = d.key;
+
+      var head = document.createElement('div');
+      head.className = 'day-head';
+      head.innerHTML = '<span class="day-name">'+d.label+'요일</span>' + (d.isToday ? '<span class="today-badge">오늘</span>' : '<span class="day-date">'+d.m+'/'+d.day+'</span>');
+      col.appendChild(head);
+
+      var list = document.createElement('div');
+      list.className = 'day-tasks';
+      var dayTasks = tasksForDate(d.key);
+      if(dayTasks.length===0){
+        list.innerHTML = '<div class="day-empty">아직 계획이 없어요</div>';
+      }else{
+        dayTasks.forEach(function(t){
+          var row = document.createElement('div');
+          row.className = 'task-row' + (t.done ? ' done' : '');
+          row.innerHTML =
+            '<span class="status-dot'+(t.done?' on':'')+'"></span>'+
+            '<div class="task-text" data-reassign="'+t.id+'">'+escapeHtml(t.text)+'</div>'+
+            '<div class="task-del" data-del="'+t.id+'">✕</div>';
+          list.appendChild(row);
+        });
+      }
+      col.appendChild(list);
+
+      var prog = document.createElement('div');
+      prog.className = 'day-progress';
+      var doneCount = dayTasks.filter(function(t){return t.done;}).length;
+      prog.textContent = dayTasks.length ? (doneCount+' / '+dayTasks.length+' 완료') : '';
+      col.appendChild(prog);
+
+      board.appendChild(col);
+    });
+
+    var doneDays = info.days.filter(function(d){ return isDayComplete(d.key); }).length;
+    document.getElementById('weekProgressLabel').textContent = '이번 주 '+doneDays+'/7일 완료';
+    document.getElementById('weekProgressFill').style.width = (doneDays/7*100)+'%';
+    var weeklyBtn = document.getElementById('weeklyGachaBtn');
+    var weeklyClaimed = !!state.weeklyClaims[info.weekKey];
+    var allWeekDone = doneDays===7;
+    weeklyBtn.disabled = !allWeekDone || weeklyClaimed;
+    weeklyBtn.textContent = weeklyClaimed ? ('🎉 주간 보상: '+state.weeklyClaims[info.weekKey]) : '🎁 주간 뽑기';
+    weeklyBtn.onclick = (allWeekDone && !weeklyClaimed) ? function(){ openGacha('weekly', info.weekKey); } : null;
+  }
+
+  function renderPouch(){
+    var wrap = document.getElementById('pouchCard');
+    wrap.innerHTML = '';
+    if(!state.wonRewards || state.wonRewards.length===0){
+      wrap.innerHTML = '<div class="empty-msg">아직 받은 보상이 없어요. 학습을 완료하고 뽑기에 도전해보세요!</div>';
+      return;
+    }
+    state.wonRewards.forEach(function(w){
+      var row = document.createElement('div');
+      row.className = 'pouch-item';
+      var typeLabel = w.type==='weekly' ? '주간' : '일일';
+      row.innerHTML =
+        '<div class="pouch-text"><span class="pouch-tag">'+typeLabel+'</span>'+escapeHtml(w.text)+'<span class="pouch-date">('+w.date+')</span></div>'+
+        '<button class="btn btn-ghost pouch-use-btn" data-pouchdel="'+w.id+'">사용 완료 ✔</button>';
+      wrap.appendChild(row);
+    });
+  }
+
+  function renderRewards(){
+    var wrap = document.getElementById('rewardList');
+    wrap.innerHTML = '';
+    state.rewards.forEach(function(r, idx){
+      var chip = document.createElement('div');
+      chip.className = 'reward-chip';
+      chip.innerHTML = '<span>'+escapeHtml(r)+'</span><span class="x" data-rdel="'+idx+'">✕</span>';
+      wrap.appendChild(chip);
+    });
+  }
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  // ---------------- interactions ----------------
+  document.getElementById('add-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var input = document.getElementById('new-task-input');
+    var text = input.value.trim();
+    if(!text) return;
+    state.tasks.push({ id: uid(), text: text, date: null, done:false });
+    input.value = '';
+    saveState(); render();
+  });
+
+  document.getElementById('reward-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var input = document.getElementById('reward-input');
+    var text = input.value.trim();
+    if(!text) return;
+    state.rewards.push(text);
+    input.value = '';
+    saveState(); render();
+  });
+
+  document.addEventListener('click', function(e){
+    var delId = e.target.getAttribute('data-del');
+    if(delId){
+      state.tasks = state.tasks.filter(function(t){ return t.id!==delId; });
+      saveState(); render(); return;
+    }
+    var rdel = e.target.getAttribute('data-rdel');
+    if(rdel!==null && typeof rdel!=='undefined'){
+      if(state.rewards.length<=1){ return; }
+      state.rewards.splice(parseInt(rdel,10),1);
+      saveState(); render(); return;
+    }
+    var pouchDel = e.target.getAttribute('data-pouchdel');
+    if(pouchDel){
+      state.wonRewards = state.wonRewards.filter(function(w){ return w.id!==pouchDel; });
+      saveState(); render(); return;
+    }
+    var checkId = e.target.getAttribute('data-check');
+    if(checkId){ toggleCheck(checkId, e.target); return; }
+    var reassignId = e.target.getAttribute('data-reassign');
+    if(reassignId){ openDayPicker(reassignId, e.target); return; }
+  });
+
+  function toggleCheck(taskId, el){
+    var t = state.tasks.find(function(x){ return x.id===taskId; });
+    if(!t) return;
+    t.done = !t.done;
+    if(t.done){
+      playCheckChime();
+      showStamp(el.getBoundingClientRect());
+    }
+    saveState(); render();
+  }
+
+  var pickerTaskId = null;
+  function openDayPicker(taskId, anchorEl){
+    pickerTaskId = taskId;
+    var pop = document.getElementById('dayPickerPopover');
+    var info = getWeekInfo();
+    var html = '';
+    info.days.forEach(function(d){ html += '<button data-pick="'+d.key+'">'+d.label+'요일</button>'; });
+    html += '<button class="bank-opt" data-pick="__bank__">↩ 목록으로 되돌리기</button>';
+    html += '<button class="del-opt" data-pick="__del__">🗑 삭제하기</button>';
+    pop.innerHTML = html;
+    var rect = anchorEl.getBoundingClientRect();
+    var top = Math.min(rect.bottom+6, window.innerHeight-260);
+    var left = Math.min(rect.left, window.innerWidth-232);
+    pop.style.top = Math.max(8,top)+'px';
+    pop.style.left = Math.max(8,left)+'px';
+    pop.classList.add('show');
+  }
+  document.getElementById('dayPickerPopover').addEventListener('click', function(e){
+    var pick = e.target.getAttribute('data-pick');
+    if(!pick || !pickerTaskId) return;
+    var t = state.tasks.find(function(x){ return x.id===pickerTaskId; });
+    if(t){
+      if(pick==='__del__'){ state.tasks = state.tasks.filter(function(x){return x.id!==pickerTaskId;}); }
+      else if(pick==='__bank__'){ t.date=null; }
+      else { t.date = pick; }
+      saveState(); render();
+    }
+    closeDayPicker();
+  });
+  function closeDayPicker(){
+    document.getElementById('dayPickerPopover').classList.remove('show');
+    pickerTaskId = null;
+  }
+  document.addEventListener('pointerdown', function(e){
+    var pop = document.getElementById('dayPickerPopover');
+    if(pop.classList.contains('show') && !pop.contains(e.target) && !e.target.hasAttribute('data-reassign')){
+      closeDayPicker();
+    }
+  });
+
+  function attachChipDrag(chip, taskId){
+    var startX, startY, dragging=false, ghost=null, moved=false;
+    chip.addEventListener('pointerdown', function(e){
+      if(e.target.hasAttribute('data-del')) return;
+      startX = e.clientX; startY = e.clientY; dragging = true; moved=false;
+      chip.setPointerCapture(e.pointerId);
+    });
+    chip.addEventListener('pointermove', function(e){
+      if(!dragging) return;
+      var dx = e.clientX-startX, dy = e.clientY-startY;
+      if(!moved && (Math.abs(dx)>8 || Math.abs(dy)>8)){
+        moved = true;
+        ghost = chip.cloneNode(true);
+        ghost.style.position='fixed'; ghost.style.zIndex='70'; ghost.style.opacity='0.9';
+        ghost.style.pointerEvents='none'; ghost.style.width = chip.offsetWidth+'px';
+        document.body.appendChild(ghost);
+      }
+      if(ghost){
+        ghost.style.left = (e.clientX - chip.offsetWidth/2)+'px';
+        ghost.style.top = (e.clientY - 20)+'px';
+        clearDragOver();
+        var target = document.elementFromPoint(e.clientX, e.clientY);
+        var col = target && target.closest('.day-col');
+        if(col) col.classList.add('drag-over');
+      }
+    });
+    chip.addEventListener('pointerup', function(e){
+      if(!dragging) return;
+      dragging = false;
+      clearDragOver();
+      if(moved){
+        var target = document.elementFromPoint(e.clientX, e.clientY);
+        var col = target && target.closest('.day-col');
+        if(ghost) ghost.remove();
+        if(col){
+          var t = state.tasks.find(function(x){ return x.id===taskId; });
+          if(t){ t.date = col.dataset.day; saveState(); render(); }
+        }
+      } else {
+        openDayPicker(taskId, chip);
+      }
+      ghost = null;
+    });
+    chip.addEventListener('pointercancel', function(){
+      dragging=false; if(ghost) ghost.remove(); ghost=null; clearDragOver();
+    });
+  }
+  function clearDragOver(){
+    document.querySelectorAll('.day-col.drag-over').forEach(function(c){ c.classList.remove('drag-over'); });
+  }
+
+  // ---------------- gacha ----------------
+  var gachaCtx = { type:null, key:null };
+  function openGacha(type, key){
+    gachaCtx.type = type; gachaCtx.key = key;
+    var modal = document.getElementById('gachaModal');
+    var card = document.getElementById('gachaCard');
+    card.classList.toggle('special', type==='weekly');
+    document.getElementById('gachaTitle').textContent = type==='weekly' ? '일주일 개근 성공!' : '오늘의 학습 완료!';
+    document.getElementById('gachaSub').textContent = '뽑기 버튼을 눌러 보상을 확인해요';
+    document.getElementById('rewardReveal').classList.remove('show');
+    document.getElementById('rewardText').textContent = '';
+    document.getElementById('gachaCloseBtn').classList.add('hidden');
+    document.getElementById('gachaPullBtn').classList.remove('hidden');
+    document.getElementById('fallingCapsule').classList.remove('drop');
+    modal.classList.remove('hidden');
+  }
+  document.getElementById('gachaPullBtn').addEventListener('click', function(){
+    var btn = this;
+    btn.disabled = true;
+    document.getElementById('fallingCapsule').classList.add('drop');
+    setTimeout(function(){
+      var reward = state.rewards[Math.floor(Math.random()*state.rewards.length)];
+      document.getElementById('rewardText').textContent = reward;
+      document.getElementById('rewardReveal').classList.add('show');
+      var today = todayKey();
+      if(gachaCtx.type==='daily'){
+        state.dailyClaims[gachaCtx.key] = reward;
+        playDayFanfare(); spawnConfetti(36);
+      } else {
+        state.weeklyClaims[gachaCtx.key] = reward;
+        playWeeklyFanfare(); spawnConfetti(70);
+      }
+      state.wonRewards.unshift({ id: uid(), text: reward, date: today, type: gachaCtx.type });
+      saveState();
+      btn.classList.add('hidden');
+      document.getElementById('gachaCloseBtn').classList.remove('hidden');
+    }, 900);
+  });
+  document.getElementById('gachaCloseBtn').addEventListener('click', function(){
+    document.getElementById('gachaModal').classList.add('hidden');
+    document.getElementById('gachaPullBtn').disabled = false;
+    render();
+  });
+
+  // ---------------- init ----------------
+  render();
+  loadState(render);
+
+})();
+</script>
+</body>
+</html>
