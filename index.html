@@ -73,7 +73,8 @@
 
   .top-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:14px 18px; background:var(--glass-bg-strong); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border:1.5px solid var(--glass-border); border-radius:var(--radius); box-shadow:var(--shadow); }
   .brand-block{ display:flex; align-items:center; gap:12px; }
-  .icon-badge{ width:52px; height:52px; border-radius:10px; background:linear-gradient(160deg, var(--sky), var(--sky-deep)); border:3px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
+  .icon-badge{ height:52px; padding:5px 9px; border-radius:10px; background:#fff; border:3px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
+  .icon-badge img{ height:100%; width:auto; display:block; }
   .brand-title{ font-size:21px; margin:0; color:var(--ink); }
   .brand-sub{ font-size:12.5px; color:var(--ink-soft); margin-top:6px; font-family:'Gowun Dodum',sans-serif; }
   .date-streak{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
@@ -183,6 +184,25 @@
   .pouch-date{ color:var(--ink-soft); font-size:12px; margin-left:4px; }
   .pouch-use-btn{ padding:7px 10px; font-size:12.5px; white-space:nowrap; }
 
+  .study-log-card{ display:flex; flex-direction:column; gap:14px; background:var(--glass-bg-strong); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border:1.5px solid var(--glass-border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); }
+  .log-stat-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .log-stat{ flex:1; min-width:120px; background:var(--paper); border:2px solid var(--line); border-radius:12px; padding:10px 12px; text-align:center; }
+  .log-stat-num{ font-family:'Jua',sans-serif; font-size:21px; color:var(--sky-deep); }
+  .log-stat-label{ font-size:11.5px; color:var(--ink-soft); margin-top:2px; }
+  .log-sub{ background:var(--paper); border:2px solid var(--line); border-radius:12px; padding:12px; }
+  .log-sub-title{ font-weight:700; font-size:14px; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  #reading-form, #listening-form{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+  .log-input{ padding:9px 10px; border-radius:9px; border:2px solid var(--line); font-family:inherit; font-size:13px; background:#fff; }
+  .log-input:focus{ outline:none; border-color:var(--sky); }
+  #reading-title-input{ flex:2 1 120px; }
+  #reading-vol-input{ width:76px; }
+  #listening-min-input{ width:92px; }
+  .log-add-btn{ padding:9px 14px; font-size:13px; }
+  .log-list{ display:flex; flex-direction:column; gap:6px; max-height:170px; overflow-y:auto; }
+  .log-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; background:#fff; border:2px solid var(--line); border-radius:9px; padding:7px 10px; font-size:12.5px; }
+  .log-row-del{ cursor:pointer; opacity:.45; flex-shrink:0; font-size:13px; }
+  .log-row-del:hover{ opacity:1; }
+
   details.rewards-card{ background:var(--glass-bg-strong); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border:1.5px solid var(--glass-border); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow); }
   details.rewards-card summary{ cursor:pointer; font-weight:700; font-size:14px; list-style:none; display:flex; align-items:center; gap:8px;}
   details.rewards-card summary::-webkit-details-marker{ display:none; }
@@ -232,6 +252,7 @@
 
   .modal-overlay{ position:fixed; inset:0; background:rgba(27,27,47,0.6); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px; }
   .modal-overlay.hidden{ display:none; }
+  .hidden{ display:none !important; }
   .gacha-card{ background:var(--glass-bg-strong); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:var(--radius); padding:26px 22px 22px; width:100%; max-width:340px; text-align:center; position:relative; border:1.5px solid var(--sky); box-shadow: var(--shadow); }
   .gacha-card.special{ border-color:var(--sun); }
   .gacha-title{ font-size:19px; margin:0 0 6px; }
@@ -251,6 +272,19 @@
   .reward-caption{ font-size:12.5px; color:var(--ink-soft); }
   .modal-close-btn{ margin-top:16px; width:100%; }
 
+  .tutorial-card{ background:var(--glass-bg-strong); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:var(--radius); border:1.5px solid var(--glass-border); padding:22px 20px; width:100%; max-width:380px; max-height:85vh; overflow-y:auto; text-align:center; }
+  .tutorial-emoji{ font-size:44px; line-height:1; margin-bottom:6px; }
+  .tutorial-title{ font-size:18px; margin:0 0 8px; }
+  .tutorial-body{ font-size:13.5px; color:var(--ink-soft); line-height:1.6; text-align:left; background:var(--paper); border:2px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:14px; }
+  .tutorial-body b{ color:var(--ink); }
+  .tutorial-dots{ display:flex; justify-content:center; gap:6px; margin-bottom:14px; }
+  .tutorial-dot{ width:8px; height:8px; border-radius:50%; background:var(--line); }
+  .tutorial-dot.active{ background:var(--sky-deep); }
+  .tutorial-actions{ display:flex; gap:8px; }
+  .tutorial-actions .btn{ flex:1; }
+  .tutorial-skip{ margin-top:10px; background:none; border:none; color:var(--ink-soft); opacity:0.6; font-size:12px; cursor:pointer; text-decoration:underline; font-family:inherit; }
+  .help-fab{ position:fixed; right:16px; bottom:16px; z-index:70; width:44px; height:44px; border-radius:50%; background:var(--sky-deep); color:#fff; border:none; font-size:18px; font-weight:700; box-shadow:var(--shadow); cursor:pointer; font-family:inherit; }
+
   @media (max-width:520px){ .day-col{ flex-basis:150px; } }
 </style>
 </head>
@@ -265,7 +299,7 @@
 
   <div class="top-bar">
     <div class="brand-block">
-      <div class="icon-badge"><span class="icon-anim icon-bounce">🎮</span></div>
+      <div class="icon-badge"><img src="logo-aiboram.png" alt="아이보람 로고" class="icon-anim icon-bounce"></div>
       <div>
         <h1 class="brand-title">스스로 학습 퀘스트</h1>
         <div class="brand-sub">오늘의 퀘스트를 깨고, 뽑기로 보상 받자!</div>
@@ -312,6 +346,35 @@
       <button class="btn btn-berry btn-arcade" id="weeklyGachaBtn" disabled>🎁 주간 뽑기</button>
     </div>
     <div class="week-highlight" id="weekHighlight"></div>
+  </section>
+
+  <section class="study-log-section">
+    <div class="section-head"><h2><span class="icon-anim icon-wiggle">📚</span> 엄마표 영어 기록</h2><span class="section-hint">읽은 책과 집중듣기 시간을 쌓아보아요</span></div>
+    <div class="study-log-card">
+      <div class="log-stat-row">
+        <div class="log-stat"><div class="log-stat-num" id="statTotalBooks">0권</div><div class="log-stat-label">누적 읽은 책</div></div>
+        <div class="log-stat"><div class="log-stat-num" id="statTotalListening">0분</div><div class="log-stat-label">누적 집중듣기</div></div>
+        <div class="log-stat"><div class="log-stat-num" id="statWeekBooks">0권</div><div class="log-stat-label">이번 주 읽은 책</div></div>
+        <div class="log-stat"><div class="log-stat-num" id="statWeekListening">0분</div><div class="log-stat-label">이번 주 집중듣기</div></div>
+      </div>
+      <div class="log-sub">
+        <div class="log-sub-title">📖 책 읽기 기록</div>
+        <form id="reading-form">
+          <input id="reading-title-input" class="log-input" type="text" maxlength="40" placeholder="책 이름 (예: Brown Bear, Brown Bear)" autocomplete="off" />
+          <input id="reading-vol-input" class="log-input" type="number" min="1" max="99" value="1" placeholder="권 수" />
+          <button type="submit" class="btn btn-primary btn-arcade log-add-btn">기록</button>
+        </form>
+        <div class="log-list" id="readingLogList"></div>
+      </div>
+      <div class="log-sub">
+        <div class="log-sub-title">🎧 집중듣기 기록</div>
+        <form id="listening-form">
+          <input id="listening-min-input" class="log-input" type="number" min="1" max="600" placeholder="분" />
+          <button type="submit" class="btn btn-primary btn-arcade log-add-btn">기록</button>
+        </form>
+        <div class="log-list" id="listeningLogList"></div>
+      </div>
+    </div>
   </section>
 
   <section class="growth-section">
@@ -373,6 +436,22 @@
   </div>
 </div>
 
+<button id="helpFabBtn" class="help-fab" aria-label="사용법 보기">❓</button>
+
+<div id="tutorialModal" class="modal-overlay hidden">
+  <div class="tutorial-card">
+    <div class="tutorial-emoji" id="tutorialEmoji"></div>
+    <h3 class="tutorial-title" id="tutorialTitle"></h3>
+    <div class="tutorial-body" id="tutorialBody"></div>
+    <div class="tutorial-dots" id="tutorialDots"></div>
+    <div class="tutorial-actions">
+      <button class="btn btn-ghost btn-arcade hidden" id="tutorialPrevBtn">이전</button>
+      <button class="btn btn-primary btn-arcade" id="tutorialNextBtn">다음</button>
+    </div>
+    <button class="tutorial-skip" id="tutorialSkipBtn">건너뛰기</button>
+  </div>
+</div>
+
 <div id="parentModal" class="modal-overlay hidden">
   <div class="parent-modal-card">
     <h3 style="font-size:13px;margin-top:0;">👨‍👩‍👧 학부모 관리</h3>
@@ -386,6 +465,7 @@
         <button class="btn btn-primary" id="sendSheetBtn">📤 구글시트로 보내기</button>
         <button class="btn btn-ghost" id="copyCsvBtn">📋 기록 복사(CSV)</button>
       </div>
+      <div class="parent-label" style="font-weight:400;">학습완료·보상·독서·집중듣기 기록이 시트 4개로 자동 정리돼요.</div>
 
       <div class="parent-label" style="margin-top:6px;">학부모 PIN (보상 지급 확인용, 선택)</div>
       <div class="parent-url-row">
@@ -531,6 +611,16 @@
     '    if (s2.getLastRow() === 0) s2.appendRow(["날짜","구분","보상내용"]);',
     '    data.rewards.forEach(function(r){ s2.appendRow([r.date, r.type==="weekly"?"주간":"일일", r.text]); });',
     '  }',
+    '  if (data.readingLogs && data.readingLogs.length) {',
+    '    var s3 = ss.getSheetByName("독서기록") || ss.insertSheet("독서기록");',
+    '    if (s3.getLastRow() === 0) s3.appendRow(["날짜","책이름","권수"]);',
+    '    data.readingLogs.forEach(function(r){ s3.appendRow([r.date, r.title, r.volumes]); });',
+    '  }',
+    '  if (data.listeningLogs && data.listeningLogs.length) {',
+    '    var s4 = ss.getSheetByName("집중듣기기록") || ss.insertSheet("집중듣기기록");',
+    '    if (s4.getLastRow() === 0) s4.appendRow(["날짜","집중듣기(분)"]);',
+    '    data.listeningLogs.forEach(function(l){ s4.appendRow([l.date, l.minutes]); });',
+    '  }',
     '  return ContentService.createTextOutput(JSON.stringify({ok:true}))',
     '    .setMimeType(ContentService.MimeType.JSON);',
     '}'
@@ -552,7 +642,12 @@
     dailyNotes: {},
     bestStreakDays: 0,
     firstRunDone: false,
-    lastSeenLevelName: ''
+    lastSeenLevelName: '',
+    tutorialSeen: false,
+    readingLogs: [],
+    listeningLogs: [],
+    sentReadingLogIds: {},
+    sentListeningLogIds: {}
   };
 
   var showPresetsThisSession = true;
@@ -690,10 +785,16 @@
         state.bestStreakDays = p.bestStreakDays || 0;
         state.firstRunDone = p.firstRunDone || false;
         state.lastSeenLevelName = p.lastSeenLevelName || '';
+        state.tutorialSeen = p.tutorialSeen || false;
+        state.readingLogs = p.readingLogs || [];
+        state.listeningLogs = p.listeningLogs || [];
+        state.sentReadingLogIds = p.sentReadingLogIds || {};
+        state.sentListeningLogIds = p.sentListeningLogIds || {};
       }
     }catch(e){ /* ignore corrupt data */ }
     showPresetsThisSession = !state.firstRunDone;
     if(!state.firstRunDone){ state.firstRunDone = true; saveState(); }
+    if(!state.tutorialSeen){ openTutorial(); }
     cb();
   }
   var saveTimer = null;
@@ -763,7 +864,7 @@
 
   function render(){
     renderHeader(); renderToday(); renderPresets(); renderBank(); renderWeek();
-    renderGrowth(); renderPouch(); renderRewards();
+    renderStudyLog(); renderGrowth(); renderPouch(); renderRewards();
   }
   function renderHeader(){
     var now=new Date(); var wd=['일','월','화','수','목','금','토'][now.getDay()];
@@ -921,6 +1022,49 @@
     }
   }
 
+  function weekKeySet(){
+    var days = getWeekInfo().days;
+    var set = {};
+    days.forEach(function(d){ set[d.key]=true; });
+    return set;
+  }
+  function formatMinutes(total){
+    total = total||0;
+    if(total<60) return total+'분';
+    var h=Math.floor(total/60), m=total%60;
+    return h+'시간'+(m>0 ? ' '+m+'분' : '');
+  }
+  function renderStudyLog(){
+    var totalBooks = (state.readingLogs||[]).reduce(function(s,r){ return s + (r.volumes||1); }, 0);
+    var totalMinutes = (state.listeningLogs||[]).reduce(function(s,l){ return s + (l.minutes||0); }, 0);
+    var wset = weekKeySet();
+    var weekBooks = (state.readingLogs||[]).filter(function(r){ return wset[r.date]; }).reduce(function(s,r){ return s + (r.volumes||1); }, 0);
+    var weekMinutes = (state.listeningLogs||[]).filter(function(l){ return wset[l.date]; }).reduce(function(s,l){ return s + (l.minutes||0); }, 0);
+
+    document.getElementById('statTotalBooks').textContent = totalBooks+'권';
+    document.getElementById('statTotalListening').textContent = formatMinutes(totalMinutes);
+    document.getElementById('statWeekBooks').textContent = weekBooks+'권';
+    document.getElementById('statWeekListening').textContent = formatMinutes(weekMinutes);
+
+    var rWrap = document.getElementById('readingLogList');
+    if(!state.readingLogs || state.readingLogs.length===0){
+      rWrap.innerHTML = '<div class="empty-msg">아직 읽은 책 기록이 없어요.</div>';
+    }else{
+      rWrap.innerHTML = state.readingLogs.slice().reverse().slice(0,30).map(function(r){
+        return '<div class="log-row"><span>'+escapeHtml(r.date)+' · '+escapeHtml(r.title)+' ('+(r.volumes||1)+'권)</span><span class="log-row-del" data-readingdel="'+r.id+'">✕</span></div>';
+      }).join('');
+    }
+
+    var lWrap = document.getElementById('listeningLogList');
+    if(!state.listeningLogs || state.listeningLogs.length===0){
+      lWrap.innerHTML = '<div class="empty-msg">아직 집중듣기 기록이 없어요.</div>';
+    }else{
+      lWrap.innerHTML = state.listeningLogs.slice().reverse().slice(0,30).map(function(l){
+        return '<div class="log-row"><span>'+escapeHtml(l.date)+' · '+(l.minutes||0)+'분</span><span class="log-row-del" data-listeningdel="'+l.id+'">✕</span></div>';
+      }).join('');
+    }
+  }
+
   function renderGrowth(){
     var total = Object.keys(state.completions).filter(function(k){ return state.completions[k]; }).length;
     var lvl = computeLevel(total);
@@ -990,6 +1134,24 @@
     var text=input.value.trim(); if(!text) return;
     state.rewards.push(text); input.value=''; saveState(); render();
   });
+  document.getElementById('reading-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var titleInput=document.getElementById('reading-title-input');
+    var volInput=document.getElementById('reading-vol-input');
+    var title=titleInput.value.trim(); if(!title) return;
+    var vol=parseInt(volInput.value,10); if(!vol || vol<1) vol=1;
+    state.readingLogs.push({ id: uid(), date: todayKey(), title: title, volumes: vol });
+    titleInput.value=''; volInput.value='1';
+    saveState(); render();
+  });
+  document.getElementById('listening-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var minInput=document.getElementById('listening-min-input');
+    var min=parseInt(minInput.value,10); if(!min || min<1) return;
+    state.listeningLogs.push({ id: uid(), date: todayKey(), minutes: min });
+    minInput.value='';
+    saveState(); render();
+  });
 
   document.addEventListener('click', function(e){
     var gradeAttr=e.target.getAttribute('data-grade');
@@ -1021,6 +1183,16 @@
         if(entered!==state.parentPin){ alert('PIN이 일치하지 않습니다.'); return; }
       }
       state.wonRewards=state.wonRewards.filter(function(w){ return w.id!==pouchDel; });
+      saveState(); render(); return;
+    }
+    var readingDel=e.target.getAttribute('data-readingdel');
+    if(readingDel){
+      state.readingLogs=state.readingLogs.filter(function(r){ return r.id!==readingDel; });
+      saveState(); render(); return;
+    }
+    var listeningDel=e.target.getAttribute('data-listeningdel');
+    if(listeningDel){
+      state.listeningLogs=state.listeningLogs.filter(function(l){ return l.id!==listeningDel; });
       saveState(); render(); return;
     }
     var checkAttr=e.target.getAttribute('data-check');
@@ -1225,6 +1397,12 @@
       var tpl=findTpl(tplId); if(!tpl) return;
       rows.push([dateKey, WD_LABEL[dateKeyToWeekdayKey(dateKey)], tpl.text, '학습완료']);
     });
+    (state.readingLogs||[]).forEach(function(r){
+      rows.push([r.date, WD_LABEL[dateKeyToWeekdayKey(r.date)], r.title+' ('+(r.volumes||1)+'권)', '책읽기']);
+    });
+    (state.listeningLogs||[]).forEach(function(l){
+      rows.push([l.date, WD_LABEL[dateKeyToWeekdayKey(l.date)], (l.minutes||0)+'분', '집중듣기']);
+    });
     state.wonRewards.forEach(function(w){ rows.push([w.date, '', w.text, w.type==='weekly'?'주간보상':'일일보상']); });
     return rows.map(function(r){
       return r.map(function(v){ v=String(v==null?'':v); if(/[",\n]/.test(v)) v='"'+v.replace(/"/g,'""')+'"'; return v; }).join(',');
@@ -1240,7 +1418,11 @@
     });
     var rewards=[];
     state.wonRewards.forEach(function(w){ if(state.sentRewardIds[w.id]) return; rewards.push({ date:w.date, type:w.type, text:w.text, id:w.id }); });
-    return { records:records, rewards:rewards };
+    var readingLogs=[];
+    (state.readingLogs||[]).forEach(function(r){ if(state.sentReadingLogIds[r.id]) return; readingLogs.push({ date:r.date, title:r.title, volumes:r.volumes, id:r.id }); });
+    var listeningLogs=[];
+    (state.listeningLogs||[]).forEach(function(l){ if(state.sentListeningLogIds[l.id]) return; listeningLogs.push({ date:l.date, minutes:l.minutes, id:l.id }); });
+    return { records:records, rewards:rewards, readingLogs:readingLogs, listeningLogs:listeningLogs };
   }
   document.getElementById('saveUrlBtn').addEventListener('click', function(){
     state.parentSheetUrl=document.getElementById('parentUrlInput').value.trim();
@@ -1257,17 +1439,19 @@
     var url=(state.parentSheetUrl||'').trim();
     if(!url){ statusEl.textContent='먼저 구글시트 URL을 저장해주세요.'; return; }
     var data=gatherUnsent();
-    if(data.records.length===0 && data.rewards.length===0){ statusEl.textContent='새로 보낼 기록이 없어요.'; return; }
+    if(data.records.length===0 && data.rewards.length===0 && data.readingLogs.length===0 && data.listeningLogs.length===0){ statusEl.textContent='새로 보낼 기록이 없어요.'; return; }
     statusEl.textContent='전송 중...';
     fetch(url, {
       method:'POST', mode:'no-cors',
       headers:{ 'Content-Type':'text/plain;charset=utf-8' },
-      body: JSON.stringify({ records:data.records, rewards:data.rewards })
+      body: JSON.stringify({ records:data.records, rewards:data.rewards, readingLogs:data.readingLogs, listeningLogs:data.listeningLogs })
     }).then(function(){
       data.records.forEach(function(r){ state.sentCompletionKeys[r.key]=true; });
       data.rewards.forEach(function(r){ state.sentRewardIds[r.id]=true; });
+      data.readingLogs.forEach(function(r){ state.sentReadingLogIds[r.id]=true; });
+      data.listeningLogs.forEach(function(l){ state.sentListeningLogIds[l.id]=true; });
       saveState();
-      statusEl.textContent='✅ 전송했어요! 구글시트에서 확인해보세요. (기록 '+data.records.length+'건, 보상 '+data.rewards.length+'건)';
+      statusEl.textContent='✅ 전송했어요! 구글시트에서 확인해보세요. (기록 '+data.records.length+'건, 보상 '+data.rewards.length+'건, 독서 '+data.readingLogs.length+'건, 집중듣기 '+data.listeningLogs.length+'건)';
     }).catch(function(){
       statusEl.textContent='전송에 실패했어요. URL이 올바른지 확인해주세요.';
     });
@@ -1284,6 +1468,52 @@
       document.getElementById('parentStatus').textContent='스크립트를 복사했어요.';
     });
   });
+
+  // ---------------- tutorial ----------------
+  var TUTORIAL_STEPS = [
+    { emoji:'👋', title:'스스로 학습 퀘스트에 오신 걸 환영해요!', body:'매일 학습 퀘스트를 깨고 뽑기로 보상을 받는 앱이에요.<br>사용법을 짧게 소개해 드릴게요. (총 '+'STEPCOUNT'+'단계)' },
+    { emoji:'✅', title:'오늘의 퀘스트', body:'오늘 할 일이 <b>오늘의 퀘스트</b>에 자동으로 모여요.<br>체크박스를 눌러 완료하면, 오늘 퀘스트를 다 깼을 때 <b>뽑기</b> 버튼이 나타나요!' },
+    { emoji:'✏️', title:'퀘스트 목록 만들기', body:'<b>퀘스트 목록</b>에서 할 일을 추가하고, 요일 칩을 눌러 어떤 요일에 할지 골라요.<br>"매일"로 지정하면 매일 나타나요.' },
+    { emoji:'🗓️', title:'이번 주 퀘스트 맵', body:'한 주의 퀘스트를 한눈에 볼 수 있어요.<br>칩을 길게 누르면 요일 칸으로 옮길 수 있고, 한 주를 모두 완료하면 <b>주간 뽑기</b>도 받을 수 있어요!' },
+    { emoji:'📚', title:'엄마표 영어 기록', body:'읽은 책 이름과 권 수, 집중듣기 시간을 기록하면<br>누적 권수·누적 시간이 자동으로 쌓여요.<br>구글시트로 보내면 책 제목까지 학부모가 확인할 수 있어요!' },
+    { emoji:'🌱', title:'성장 레벨 & 보상 보따리', body:'퀘스트를 깰수록 캐릭터가 자라나요.<br>뽑기로 받은 보상은 <b>보상 보따리</b>에 쌓이고, 실제로 사용한 뒤에는 지워주면 돼요.' },
+    { emoji:'⚙️', title:'설정 & 학부모 연동', body:'뽑기 보상 목록은 직접 추가/수정할 수 있어요.<br>화면 맨 아래 ⚙ 버튼으로 학부모용 설정(구글시트 연동 등)에 들어갈 수 있어요.<br>궁금할 땐 오른쪽 아래 <b>❓</b> 버튼을 눌러 이 설명을 다시 볼 수 있어요.' }
+  ];
+  var tutorialIdx = 0;
+  function renderTutorialStep(){
+    var step = TUTORIAL_STEPS[tutorialIdx];
+    document.getElementById('tutorialEmoji').textContent = step.emoji;
+    document.getElementById('tutorialTitle').textContent = step.title;
+    document.getElementById('tutorialBody').innerHTML = step.body.replace('STEPCOUNT', TUTORIAL_STEPS.length);
+    var dotsEl = document.getElementById('tutorialDots');
+    dotsEl.innerHTML = '';
+    TUTORIAL_STEPS.forEach(function(_, i){
+      var d = document.createElement('div');
+      d.className = 'tutorial-dot' + (i===tutorialIdx ? ' active' : '');
+      dotsEl.appendChild(d);
+    });
+    document.getElementById('tutorialPrevBtn').classList.toggle('hidden', tutorialIdx===0);
+    document.getElementById('tutorialNextBtn').textContent = (tutorialIdx === TUTORIAL_STEPS.length-1) ? '시작하기!' : '다음';
+  }
+  function openTutorial(){
+    tutorialIdx = 0;
+    renderTutorialStep();
+    document.getElementById('tutorialModal').classList.remove('hidden');
+  }
+  function closeTutorial(){
+    document.getElementById('tutorialModal').classList.add('hidden');
+    if(!state.tutorialSeen){ state.tutorialSeen = true; saveState(); }
+  }
+  document.getElementById('tutorialNextBtn').addEventListener('click', function(){
+    if(tutorialIdx >= TUTORIAL_STEPS.length-1){ closeTutorial(); return; }
+    tutorialIdx++; renderTutorialStep();
+  });
+  document.getElementById('tutorialPrevBtn').addEventListener('click', function(){
+    if(tutorialIdx<=0) return;
+    tutorialIdx--; renderTutorialStep();
+  });
+  document.getElementById('tutorialSkipBtn').addEventListener('click', closeTutorial);
+  document.getElementById('helpFabBtn').addEventListener('click', openTutorial);
 
   // ---------------- init ----------------
   document.getElementById('appsScriptCode').value = APPS_SCRIPT_CODE;
